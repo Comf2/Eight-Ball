@@ -1,0 +1,12 @@
+# Blender 3.3.1 MTL File: 'eight-ball.blend'
+# www.blender.org
+
+newmtl Material.005
+Ns 416.611633
+Ka 0.704545 0.704545 0.704545
+Kd 0.000000 0.000000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3

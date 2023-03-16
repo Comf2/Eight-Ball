@@ -60,6 +60,62 @@ mtlLoader.load('./public/models/eight-ball.mtl', (materials) => {
 		}
 	);
 });
+//table
+mtlLoader.load('./public/models/table.mtl', (materials) => {
+	materials.preload();
+
+	const objLoader = new OBJLoader();
+	objLoader.setMaterials(materials);
+	const textureLoader = new THREE.TextureLoader();
+	const texture = textureLoader.load(
+		'./public/models/materials/wood-texture.png'
+	);
+	objLoader.load(
+		'./public/models/table.obj',
+		(object) => {
+			object.children.forEach((child) => {
+				console.log(child.isMesh);
+				if (child.isMesh) {
+					child.material.map = texture;
+				}
+			});
+			scene.add(object);
+		},
+		(xhr) => {
+			console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+		},
+		(error) => {
+			console.error(error);
+		}
+	);
+});
+//walls
+//table
+mtlLoader.load('./public/models/walls.mtl', (materials) => {
+	materials.preload();
+
+	const objLoader = new OBJLoader();
+	objLoader.setMaterials(materials);
+	const textureLoader = new THREE.TextureLoader();
+	objLoader.load(
+		'./public/models/walls.obj',
+		(object) => {
+			object.children.forEach((child) => {
+				console.log(child.isMesh);
+				if (child.isMesh) {
+					console.log(child)
+				}
+			});
+			scene.add(object);
+		},
+		(xhr) => {
+			console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+		},
+		(error) => {
+			console.error(error);
+		}
+	);
+});
 
 //cameras
 camera.position.z = 30;

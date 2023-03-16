@@ -24,7 +24,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 //setting skybox
 const starsTexture = new THREE.TextureLoader().load(
-	'./public/skybox/stars.png'
+	'./skybox/stars.png'
 );
 scene.background = starsTexture;
 //init models
@@ -32,17 +32,47 @@ scene.background = starsTexture;
 const mtlLoader = new MTLLoader();
 
 //eight ball
-mtlLoader.load('./public/models/eight-ball.mtl', (materials) => {
+mtlLoader.load('./models/eight-ball.mtl', (materials) => {
 	materials.preload();
 
 	const objLoader = new OBJLoader();
 	objLoader.setMaterials(materials);
 	const textureLoader = new THREE.TextureLoader();
 	const texture = textureLoader.load(
-		'./public/models/materials/eight-ball-color.png'
+		'./models/materials/eight-ball-color.png'
 	);
 	objLoader.load(
-		'./public/models/eight-ball.obj',
+		'./models/eight-ball.obj',
+		(object) => {
+			object.children.forEach((child) => {
+				console.log(child.isMesh);
+				if (child.isMesh) {
+					child.material.map = texture;
+				}
+			});
+			scene.add(object);
+		},
+		(xhr) => {
+			console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+		},
+		(error) => {
+			console.error(error);
+		}
+	);
+});
+
+//eight ball base
+mtlLoader.load('./models/eight-ball-base.mtl', (materials) => {
+	materials.preload();
+
+	const objLoader = new OBJLoader();
+	objLoader.setMaterials(materials);
+	const textureLoader = new THREE.TextureLoader();
+	const texture = textureLoader.load(
+		'./models/materials/wood-texture.png'
+	);
+	objLoader.load(
+		'./models/eight-ball-base.obj',
 		(object) => {
 			object.children.forEach((child) => {
 				console.log(child.isMesh);
@@ -61,17 +91,17 @@ mtlLoader.load('./public/models/eight-ball.mtl', (materials) => {
 	);
 });
 //table
-mtlLoader.load('./public/models/table.mtl', (materials) => {
+mtlLoader.load('./models/table.mtl', (materials) => {
 	materials.preload();
 
 	const objLoader = new OBJLoader();
 	objLoader.setMaterials(materials);
 	const textureLoader = new THREE.TextureLoader();
 	const texture = textureLoader.load(
-		'./public/models/materials/wood-texture.png'
+		'./models/materials/wood-texture.png'
 	);
 	objLoader.load(
-		'./public/models/table.obj',
+		'./models/table.obj',
 		(object) => {
 			object.children.forEach((child) => {
 				console.log(child.isMesh);
@@ -89,21 +119,23 @@ mtlLoader.load('./public/models/table.mtl', (materials) => {
 		}
 	);
 });
-//walls
-//table
-mtlLoader.load('./public/models/walls.mtl', (materials) => {
+//floor
+mtlLoader.load('./models/table.mtl', (materials) => {
 	materials.preload();
 
 	const objLoader = new OBJLoader();
 	objLoader.setMaterials(materials);
 	const textureLoader = new THREE.TextureLoader();
+	const texture = textureLoader.load(
+		'./models/materials/brick.jpg'
+	);
 	objLoader.load(
-		'./public/models/walls.obj',
+		'./models/floor.obj',
 		(object) => {
 			object.children.forEach((child) => {
 				console.log(child.isMesh);
 				if (child.isMesh) {
-					console.log(child)
+					child.material.map = texture;
 				}
 			});
 			scene.add(object);
@@ -116,6 +148,38 @@ mtlLoader.load('./public/models/walls.mtl', (materials) => {
 		}
 	);
 });
+
+//wall
+mtlLoader.load('./models/table.mtl', (materials) => {
+	materials.preload();
+
+	const objLoader = new OBJLoader();
+	objLoader.setMaterials(materials);
+	const textureLoader = new THREE.TextureLoader();
+	const texture = textureLoader.load(
+		'./models/materials/wall-texture.png'
+	);
+	objLoader.load(
+		'./models/walls.obj',
+		(object) => {
+			object.children.forEach((child) => {
+				console.log(child.isMesh);
+				if (child.isMesh) {
+					child.material.map = texture;
+				}
+			});
+			scene.add(object);
+		},
+		(xhr) => {
+			console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+		},
+		(error) => {
+			console.error(error);
+		}
+	);
+});
+
+
 
 //cameras
 camera.position.z = 30;
@@ -124,7 +188,7 @@ camera.position.z = 30;
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(20, 20, 20);
 
-const ambientLight = new THREE.AmbientLight(0x00ffff);
+const ambientLight = new THREE.AmbientLight(0xffffff);
 
 scene.add(pointLight, ambientLight);
 

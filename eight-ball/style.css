@@ -1,5 +1,8 @@
+@font-face {
+	font-family: QuiteMystical;
+	src: url('./public/fonts/QuiteMagicalRegular.ttf');
+}
 :root {
-	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 	font-size: 16px;
 	line-height: 24px;
 	font-weight: 400;
@@ -13,12 +16,73 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
+
+	/* Colors */
+	--text:#D3CBBB;
+	--light-purple:#735364;
+	--purple:#4F314B;
+	--dark-purple:#382C4C;
+	--brown:#4D3A34;
+	--secondary-text:#847C7C;
 }
 body {
+	font-family: QuiteMystical;
+	color: var(--text);
 	margin: 0;
 }
+
 canvas {
 	position: fixed;
 	top: 0;
 	left: 0;
+}
+button {
+	cursor: pointer;
+}
+.main-button {
+	box-sizing: border-box;
+	background-color: var(--dark-purple);
+	border-radius: 1rem;
+	width: min(15rem, 30vw);
+	min-width: 8rem;
+	font-size: 3em;
+	display: grid;
+	place-items: center;
+	border: 6px dashed var(--brown);
+	border-radius: 16px;
+}
+
+.content-container {
+	z-index: 999;
+	position: absolute;
+	width: 100%;
+}
+.home-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	text-align: center;
+	width: 100%;
+	height: 100dvh;
+	text-align: center;
+	align-items: center;
+	padding: 5vmin 0;
+	padding-bottom: 20vmin;
+}
+.home-container h1 {
+	font-size: clamp(6rem, 15vw, 18rem); 
+}
+.start-buttons-container {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+
+	width: 100%;
+	padding: 0 10vmin;
+}
+@media screen and (max-width:1000px) {
+	.start-buttons-container {
+		padding: 0;
+		gap: 3vmin;
+	}
 }

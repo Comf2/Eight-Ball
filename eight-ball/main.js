@@ -45,7 +45,6 @@ mtlLoader.load('./models/eight-ball.mtl', (materials) => {
 		'./models/eight-ball.obj',
 		(object) => {
 			object.children.forEach((child) => {
-				console.log(child.isMesh);
 				if (child.isMesh) {
 					child.material.map = texture;
 				}
@@ -75,7 +74,6 @@ mtlLoader.load('./models/eight-ball-base.mtl', (materials) => {
 		'./models/eight-ball-base.obj',
 		(object) => {
 			object.children.forEach((child) => {
-				console.log(child.isMesh);
 				if (child.isMesh) {
 					child.material.map = texture;
 				}
@@ -105,7 +103,6 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 		'./models/table.obj',
 		(object) => {
 			object.children.forEach((child) => {
-				console.log(child.isMesh);
 				if (child.isMesh) {
 					child.material.map = texture;
 				}
@@ -135,7 +132,6 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 		'./models/floor.obj',
 		(object) => {
 			object.children.forEach((child) => {
-				console.log(child.isMesh);
 				if (child.isMesh) {
 					child.material.map = texture;
 				}
@@ -167,7 +163,6 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 		'./models/walls.obj',
 		(object) => {
 			object.children.forEach((child) => {
-				console.log(child.isMesh);
 				if (child.isMesh) {
 					child.material.map = texture;
 				}
@@ -224,7 +219,6 @@ let usingControls = false;
 function animate() {
 	requestAnimationFrame(animate);
 	if(usingControls)  {
-		console.log('controls on')
 		controls.update();
 	}
 	renderer.render(scene, camera);
@@ -234,12 +228,7 @@ animate();
 
 //basic responsiveness
 window.addEventListener('resize', function (e) {
-	console.log(window.innerWidth);
 	if (window.innerWidth <= 700) {
 		window.location.reload();
 	}
 });
-controls.addEventListener( "change", event => {  
-    console.log('position', controls.object.position ); 
-    console.log('rotation', controls.object.rotation ); 
-}); 

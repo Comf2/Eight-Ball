@@ -110,6 +110,7 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 					child.material.map = texture;
 				}
 			});
+			object.receiveShadow = true;
 			scene.add(object);
 		},
 		(xhr) => {
@@ -139,6 +140,8 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 					child.material.map = texture;
 				}
 			});
+			object.receiveShadow = true;
+
 			scene.add(object);
 		},
 		(xhr) => {
@@ -184,19 +187,12 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 
 //cameras
 camera.position.set(2.1e-16, 1.9, 4.85)
+camera.lookAt(0,0,0)
 
-
-// x: 0.1481455944814403
-// ​
-// y: -2.3030918093779778
-// ​
-// z: 7.504721618991523
-
-//add directional light
 
 //lighting
 
-const directionalLight = new THREE.DirectionalLight(0xffffff)
+const directionalLight = new THREE.DirectionalLight(0xc98200, 0.5)
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
@@ -210,24 +206,27 @@ supportingSpotLight.castShadow = true;
 
 
 
-scene.add(mainSpotLight, supportingSpotLight);
+scene.add(mainSpotLight, supportingSpotLight, directionalLight);
 
 //helpers
-const pointLightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
 
 const mainSpotLightHelper = new THREE.SpotLightHelper(mainSpotLight)
 const supportingSpotLightHelper = new THREE.SpotLightHelper(supportingSpotLight)
 
-scene.add(pointLightHelper, gridHelper, mainSpotLightHelper, supportingSpotLightHelper);
+// scene.add(gridHelper, mainSpotLightHelper, supportingSpotLightHelper);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+//---TODO: make a button that will turn on controls so you can see the whole scene --//
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+let usingControls = false;
 //animation
 function animate() {
 	requestAnimationFrame(animate);
-
-	controls.update();
-
+	if(usingControls)  {
+		console.log('controls on')
+		controls.update();
+	}
 	renderer.render(scene, camera);
 }
 

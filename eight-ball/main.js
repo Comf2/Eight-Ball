@@ -90,6 +90,7 @@ mtlLoader.load('./models/eight-ball-base.mtl', (materials) => {
 		}
 	);
 });
+//this isnt working lol
 //table
 mtlLoader.load('./models/table.mtl', (materials) => {
 	materials.preload();
@@ -182,20 +183,43 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 
 
 //cameras
-camera.position.z = 30;
+camera.position.set(2.1e-16, 1.9, 4.85)
+
+
+// x: 0.1481455944814403
+// ​
+// y: -2.3030918093779778
+// ​
+// z: 7.504721618991523
+
+//add directional light
 
 //lighting
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(20, 20, 20);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff)
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-scene.add(pointLight, ambientLight);
+const mainSpotLight = new THREE.SpotLight(0xFFA500, 1);
+mainSpotLight.position.set(0, 5, -3)
+mainSpotLight.castShadow = true;
+
+const supportingSpotLight = new THREE.SpotLight(0xFFA500, 1);
+supportingSpotLight.position.set(0, -2, 6)
+supportingSpotLight.castShadow = true;
+
+
+
+scene.add(mainSpotLight, supportingSpotLight);
 
 //helpers
 const pointLightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(pointLightHelper, gridHelper);
+
+const mainSpotLightHelper = new THREE.SpotLightHelper(mainSpotLight)
+const supportingSpotLightHelper = new THREE.SpotLightHelper(supportingSpotLight)
+
+scene.add(pointLightHelper, gridHelper, mainSpotLightHelper, supportingSpotLightHelper);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 //animation
@@ -216,3 +240,7 @@ window.addEventListener('resize', function (e) {
 		window.location.reload();
 	}
 });
+controls.addEventListener( "change", event => {  
+    console.log('position', controls.object.position ); 
+    console.log('rotation', controls.object.rotation ); 
+}); 

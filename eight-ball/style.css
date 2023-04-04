@@ -2,6 +2,10 @@
   font-family: QuiteMystical;
   src: url('./public/fonts/QuiteMagicalRegular.ttf');
 }
+@font-face {
+  font-family: OctoberTwilight;
+  src: url('./public/fonts/OctoberTwilight.otf');
+}
 :root {
   font-size: 16px;
   line-height: 24px;
@@ -29,6 +33,7 @@ body {
   font-family: QuiteMystical;
   color: var(--text);
   margin: 0;
+  overflow-x: hidden;
 }
 
 canvas {
@@ -39,6 +44,9 @@ canvas {
 button {
   cursor: pointer;
 }
+h1 {
+  font-family: OctoberTwilight;
+}
 .main-button {
   box-sizing: border-box;
   background-color: var(--dark-purple);
@@ -46,16 +54,36 @@ button {
   width: min(15rem, 30vw);
   min-width: 8rem;
   font-size: 3em;
-  display: grid;
-  place-items: center;
   border: 6px dashed var(--brown);
   border-radius: 16px;
+  text-align: center;
+  position: relative;
 }
-
+.main-button:hover::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--light-purple);
+  z-index: -1;
+  left: 0;
+  animation: background-fade-in 1s ease-out;
+  transform-origin: center;
+  position: absolute;
+  z-index: -1;
+  filter: blur(2rem);
+}
+@keyframes background-fade-in {
+  100% {
+    scale: 2;
+    opacity: 0;
+  }
+}
 .content-container {
   z-index: 999;
   position: absolute;
   width: 100%;
+  transition: opacity 0.5s cubic-bezier(0.42, 0.08, 0.73, 1);
 }
 .home-container {
   display: flex;
@@ -70,7 +98,8 @@ button {
   padding-bottom: 20vmin;
 }
 .home-container h1 {
-  font-size: clamp(6rem, 15vw, 18rem);
+  padding: 0 3vmin;
+  font-size: clamp(4.5rem, 10vw, 8rem);
 }
 .title-background {
   background: radial-gradient(

@@ -9,10 +9,11 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 
 import { eightBallAnswers } from './public/js/eight-ball-data';
 import { getRandomInt } from './public/js/utility-functions';
+
 //project init
 
 //---TODO: make a button that will turn on controls so you can see the whole scene --//
-
+//Make shake button play animation and give an answer
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -53,6 +54,7 @@ mtlLoader.load('./models/eight-ball.mtl', (materials) => {
           child.material.map = texture;
         }
       });
+      object.name = 'eightBall';
       scene.add(object);
     },
     (xhr) => {
@@ -176,17 +178,13 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 
 // ------- Text ------- //
 
-//remove text, add new text, from array
-//push object to global array, remove object, clear it
 const fontLoader = new FontLoader();
 
 // ----- Cyclcing Text Effect on Home State ----- //
-
+let performingCycleEffect = true;
 function removeCyclingAnswerEffect(geo) {
-  console.log('geo :>> ', geo);
   scene.remove(geo);
-
-  loadCyclingAnswerEffect();
+  if (performingCycleEffect) loadCyclingAnswerEffect();
 }
 
 function loadCyclingAnswerEffect() {
@@ -216,7 +214,6 @@ function loadCyclingAnswerEffect() {
     const boundingBox = tMesh.geometry.boundingBox;
     const center = boundingBox.getCenter(new THREE.Vector3());
 
-    console.log('eightBallAnswers :>> ', eightBallAnswers);
     tMesh.position.set(0 - center.x, 0.5, 1);
     tMesh.rotation.set(-0.3, 0, 0);
 
@@ -254,18 +251,112 @@ const mainSpotLightHelper = new THREE.SpotLightHelper(mainSpotLight);
 const supportingSpotLightHelper = new THREE.SpotLightHelper(
   supportingSpotLight
 );
+// ----- initting events ----- //
+const shakeButton = document.querySelector('#shake-button');
+shakeButton.onclick = () => startEightBallEvent('shake');
+
+const askButton = document.querySelector('#ask-button');
+askButton.onclick = () => startEightBallEvent('ask');
+
+function startEightBallEvent(e) {
+  performingCycleEffect = false;
+  const contentContainer = document.querySelector('.content-container');
+  contentContainer.style.opacity = '0';
+  setTimeout(() => {
+    contentContainer.style.display = 'none';
+  }, 500);
+
+  switch (e) {
+    case 'shake':
+      initShake();
+      break;
+    case 'ask':
+      initAsk();
+      break;
+  }
+}
+// --- adding in the form --- //
+function initAsk() {
+  console.log('ima Asking');
+}
+// --- doing shake animation --- //
+function initShake() {
+  console.log(camera.rotation);
+  animatingCamera = true;
+  shakingEightBall = true;
+}
 
 // scene.add(gridHelper, mainSpotLightHelper, supportingSpotLightHelper);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-let usingControls = true;
+// const controls = new OrbitControls(camera, renderer.domElement);
+let usingControls = false;
 
 //animation
+
+function animateCamera() {
+  if (camera.rotation.x <= 0.28) camera.rotation.x += 0.01;
+  else animatingCamera = false;
+}
+
+//I apoligize to future me
+//does the shake and rising animation of the eight ball
+
+let doingFirstRot = true;
+const maxShakes = 5;
+let shakeCount = 0;
+let eightBallAnimFin = false;
+function animateEightBall() {
+  const eightBall = scene.getObjectByName('eightBall');
+  const animationSpeed = 2;
+  const shakeAmount = 0.3;
+
+  if (eightBall.position.y <= 3.5) eightBall.position.y += 0.08;
+  else if (doingFirstRot) {
+    if (eightBall.rotation.z <= 1.2 * shakeAmount)
+      eightBall.rotation.z += 0.05 * animationSpeed;
+    if (eightBall.position.x >= -1.3 * shakeAmount)
+      eightBall.position.x -= 0.05 * animationSpeed;
+    else {
+      doingFirstRot = false;
+    }
+  } else if (!doingFirstRot && shakeCount <= maxShakes) {
+    if (eightBall.rotation.z <= -1.2 * shakeAmount)
+      eightBall.rotation.z -= 0.05 * animationSpeed;
+    if (eightBall.position.x <= 1.5 * shakeAmount)
+      eightBall.position.x += 0.05 * animationSpeed;
+    else {
+      shakeCount++;
+      doingFirstRot = true;
+    }
+  } else {
+    eightBall.rotation.z = 0;
+
+    if (eightBall.position.y <= 5 && !eightBallAnimFin) {
+      console.log('hi');
+      eightBall.position.y += 0.15;
+    } else {
+      eightBall.rotation.set(0, 0, 0);
+      console.log('hello');
+      eightBallAnimFin = true;
+      if (eightBall.position.y > 0) {
+        console.log(eightBall.position.y);
+        eightBall.position.y -= 10;
+      }
+    }
+  }
+}
+function showEightBallAnswer() {
+  console.log('theres an answer ohmygodd');
+}
+let animatingCamera = false;
+let shakingEightBall = false;
 function animate() {
   requestAnimationFrame(animate);
   if (usingControls) {
     controls.update();
   }
+  if (animatingCamera) animateCamera();
+  if (shakingEightBall) animateEightBall();
   renderer.render(scene, camera);
 }
 

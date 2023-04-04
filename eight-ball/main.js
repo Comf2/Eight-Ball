@@ -92,7 +92,6 @@ mtlLoader.load('./models/eight-ball-base.mtl', (materials) => {
     }
   );
 });
-//this isnt working lol
 //table
 mtlLoader.load('./models/table.mtl', (materials) => {
   materials.preload();
@@ -179,7 +178,7 @@ mtlLoader.load('./models/table.mtl', (materials) => {
 // ------- Text ------- //
 
 const fontLoader = new FontLoader();
-
+function loadText(text) {}
 // ----- Cyclcing Text Effect on Home State ----- //
 let performingCycleEffect = true;
 function removeCyclingAnswerEffect(geo) {
@@ -260,10 +259,10 @@ askButton.onclick = () => startEightBallEvent('ask');
 
 function startEightBallEvent(e) {
   performingCycleEffect = false;
-  const contentContainer = document.querySelector('.content-container');
-  contentContainer.style.opacity = '0';
+  const homeContainer = document.querySelector('.home-container');
+  homeContainer.style.opacity = '0';
   setTimeout(() => {
-    contentContainer.style.display = 'none';
+    homeContainer.style.display = 'none';
   }, 500);
 
   switch (e) {
@@ -302,7 +301,7 @@ function animateCamera() {
 //does the shake and rising animation of the eight ball
 
 let doingFirstRot = true;
-const maxShakes = 5;
+const maxShakes = 3;
 let shakeCount = 0;
 let eightBallAnimFin = false;
 function animateEightBall() {
@@ -310,7 +309,8 @@ function animateEightBall() {
   const animationSpeed = 2;
   const shakeAmount = 0.3;
 
-  if (eightBall.position.y <= 3.5) eightBall.position.y += 0.08;
+  if ((eightBall.position.y <= 3.5) & !eightBallAnimFin)
+    eightBall.position.y += 0.08;
   else if (doingFirstRot) {
     if (eightBall.rotation.z <= 1.2 * shakeAmount)
       eightBall.rotation.z += 0.05 * animationSpeed;
@@ -335,19 +335,72 @@ function animateEightBall() {
       console.log('hi');
       eightBall.position.y += 0.15;
     } else {
+      eightBall.position.x = 0;
       eightBall.rotation.set(0, 0, 0);
-      console.log('hello');
       eightBallAnimFin = true;
-      if (eightBall.position.y > 0) {
-        console.log(eightBall.position.y);
-        eightBall.position.y -= 10;
-      }
+    }
+  }
+  if (eightBallAnimFin) {
+    if (eightBall.position.y > 0) {
+      camera.rotation.x -= 0.03;
+      eightBall.position.y -= 0.3;
+    }
+    if (eightBall.position.y < 0) {
+      eightBall.position.set(0, 0, 0);
+    } else if (eightBallAnimFin && eightBall.position.y === 0) {
+      showEightBallAnswer();
+      shakingEightBall = false;
     }
   }
 }
 function showEightBallAnswer() {
-  console.log('theres an answer ohmygodd');
+  const currentText = eightBallAnswers[getRandomInt(eightBallAnswers.length)];
+
+  fontLoader.load('/fonts/Quite Magical_Regular.json', (font) => {
+    const textSize = 200; //higher it is the smaller the text
+    const geometry = new TextGeometry(currentText, {
+      font: font,
+      size: 80 / textSize,
+      height: 5 / textSize,
+      curveSegments: 12 / textSize,
+      bevelEnabled: true,
+      bevelThickness: 10 / textSize,
+      bevelSize: 8 / textSize,
+      bevelOffset: 0 / textSize,
+      bevelSegments: 5,
+    });
+    geometry.castShadow = true;
+    geometry.revieveShadow = true;
+
+    const tMesh = new THREE.Mesh(geometry, [
+      new THREE.MeshPhongMaterial({ color: 0xffffff }),
+    ]);
+    tMesh.name = 'eightBallAnswer';
+
+    scene.add(tMesh);
+    tMesh.geometry.computeBoundingBox();
+    const boundingBox = tMesh.geometry.boundingBox;
+    const center = boundingBox.getCenter(new THREE.Vector3());
+
+    tMesh.position.set(0 - center.x, 0.5, 1);
+    tMesh.rotation.set(-0.3, 0, 0);
+  });
+  initTryAgain();
 }
+
+// --- Init Try Again Screen --- //
+
+function initTryAgain() {
+  const tryAgainContainer = document.querySelector('.try-again-container');
+  tryAgainContainer.style.display = 'flex';
+}
+
+//initing try again buttons
+const askAgainButton = document.querySelector('#ask-again-button');
+const shakeAgainButton = document.querySelector('#shake-again-button');
+
+askAgainButton.onclick = () => window.location.reload();
+
 let animatingCamera = false;
 let shakingEightBall = false;
 function animate() {

@@ -274,10 +274,17 @@ function startEightBallEvent(e) {
       break;
   }
 }
+const askQuestionContainer = document.querySelector('.ask-question-container');
 // --- adding in the form --- //
 function initAsk() {
-  console.log('ima Asking');
+  askQuestionContainer.style.display = 'flex';
+  setTimeout(() => {
+    askQuestionContainer.style.opacity = '1';
+  }, 200);
 }
+
+const submitQuestionButton = document.getElementById('submit-question');
+submitQuestionButton.onclick = () => initShakeAgain();
 // --- doing shake animation --- //
 function initShake() {
   console.log(camera.rotation);
@@ -287,9 +294,24 @@ function initShake() {
 
 // scene.add(gridHelper, mainSpotLightHelper, supportingSpotLightHelper);
 
-// const controls = new OrbitControls(camera, renderer.domElement);
-let usingControls = false;
+const showSceneButton = document.getElementById('show-scene');
+showSceneButton.onclick = () => showScene();
 
+let controls = new OrbitControls(camera, renderer.domElement);
+let usingControls = true;
+
+function showScene() {
+  controls = new OrbitControls(camera, renderer.domElement);
+  usingControls = true;
+  const homeContainer = document.querySelector('.home-container');
+  homeContainer.style.opacity = '0';
+  setTimeout(() => {
+    homeContainer.style.display = 'none';
+  }, 500);
+
+  const showSceneContainer = document.querySelector('.show-scene-container');
+  showSceneContainer.style.display = 'flex';
+}
 //animation
 
 function animateCamera() {
@@ -304,6 +326,15 @@ let doingFirstRot = true;
 const maxShakes = 3;
 let shakeCount = 0;
 let eightBallAnimFin = false;
+
+function resetEightBallAnim() {
+  doingFirstRot = true;
+  shakeCount = 0;
+  eightBallAnimFin = false;
+  animatingCamera = false;
+  shakingEightBall = false;
+}
+
 function animateEightBall() {
   const eightBall = scene.getObjectByName('eightBall');
   const animationSpeed = 2;
@@ -389,9 +420,10 @@ function showEightBallAnswer() {
 }
 
 // --- Init Try Again Screen --- //
+const tryAgainContainer = document.querySelector('.try-again-container');
 
 function initTryAgain() {
-  const tryAgainContainer = document.querySelector('.try-again-container');
+  tryAgainContainer.style.opacity = '1';
   tryAgainContainer.style.display = 'flex';
 }
 
@@ -400,6 +432,21 @@ const askAgainButton = document.querySelector('#ask-again-button');
 const shakeAgainButton = document.querySelector('#shake-again-button');
 
 askAgainButton.onclick = () => window.location.reload();
+shakeAgainButton.onclick = () => initShakeAgain();
+
+function initShakeAgain() {
+  tryAgainContainer.style.opacity = '0';
+  askQuestionContainer.style.opacity = '0';
+  setTimeout(() => {
+    tryAgainContainer.style.display = 'none';
+    askQuestionContainer.style.display = 'none';
+  }, 500);
+
+  const answer = scene.getObjectByName('eightBallAnswer');
+  removeCyclingAnswerEffect(answer);
+  resetEightBallAnim();
+  initShake();
+}
 
 let animatingCamera = false;
 let shakingEightBall = false;

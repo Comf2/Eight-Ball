@@ -1,47 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<link rel="stylesheet" href="reset.css">
-		<link
-			rel="stylesheet"
-			href="style.css"
-		/>
-		<title>Magic Eight Ball</title>
-	</head>
-	<body>
-		
-		<canvas id="main-scene"></canvas>
-		<div class="content-container">
-			<div class="home-container">
-				<div class="title-background">
-					<h1>Magic Eight Ball</h1>
-				</div>
-				<div class="start-buttons-container">
-					<button id="ask-button"  class="main-button">Ask</button>
-					<button id="shake-button" class="main-button">Shake</button>
-					<button class="main-button">Scene</button>
-				</div>
-			</div>
-			<div class="try-again-container">
-				<div class="title-background">
-					<h1>Try Again?</h1>
-				</div>
-				<div class="start-buttons-container">
-					<button id="ask-again-button"  class="main-button">Home</button>
-					<button id="shake-again-button" class="main-button">Shake</button>
-				</div>
-			</div>
-		</div>
-		
-		
-	</body>
-	<script
-		type="module"
-		src="./main.js"
-	></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="reset.css"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/c503d7f164.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Magic Eight Ball</title>
+  </head>
+  <body>
+    <canvas id="main-scene"></canvas>
+    <div class="content-container">
+      <div class="home-container">
+        <div class="title-background">
+          <h1>Magic Eight Ball</h1>
+        </div>
+        <div class="start-buttons-container">
+          <button
+            id="ask-button"
+            class="main-button"
+          >
+            Ask
+          </button>
+          <button
+            id="shake-button"
+            class="main-button"
+          >
+            Shake
+          </button>
+          <button
+            class="main-button"
+            id="show-scene"
+          >
+            Scene
+          </button>
+        </div>
+      </div>
+      <div class="try-again-container">
+        <div class="title-background">
+          <h1>Try Again?</h1>
+        </div>
+        <div class="start-buttons-container">
+          <button
+            id="ask-again-button"
+            class="main-button"
+          >
+            Home
+          </button>
+          <button
+            id="shake-again-button"
+            class="main-button"
+          >
+            Shake
+          </button>
+        </div>
+      </div>
+      <div class="ask-question-container">
+        <input
+          type="text"
+          name="question"
+          id="question"
+          class="main-input"
+        />
+        <button
+          class="main-button"
+          id="submit-question"
+        >
+          Shake
+        </button>
+      </div>
+      <div class="show-scene-container">
+        <button
+          class="main-button"
+          id="exit-show-scene"
+          onclick="window.location.reload()"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h2>Drag your mouse to look around!</h2>
+      </div>
+    </div>
+  </body>
+  <script
+    type="module"
+    src="./main.js"
+  ></script>
 </html>

@@ -297,8 +297,8 @@ function initShake() {
 const showSceneButton = document.getElementById('show-scene');
 showSceneButton.onclick = () => showScene();
 
-let controls = new OrbitControls(camera, renderer.domElement);
-let usingControls = true;
+let controls;
+let usingControls;
 
 function showScene() {
   controls = new OrbitControls(camera, renderer.domElement);

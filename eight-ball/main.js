@@ -219,7 +219,7 @@ function loadCyclingAnswerEffect() {
     //removing cycle
     setTimeout(() => {
       removeCyclingAnswerEffect(tMesh);
-    }, 200);
+    }, 750);
   });
 } //end of function
 loadCyclingAnswerEffect();

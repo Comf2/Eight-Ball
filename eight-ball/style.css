@@ -43,6 +43,7 @@ canvas {
 }
 button {
   cursor: pointer;
+  color: var(--text);
 }
 h1 {
   font-family: OctoberTwilight;
